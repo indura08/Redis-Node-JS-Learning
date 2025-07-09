@@ -1,0 +1,156 @@
+1. 🔧 What is redisClient.get()?
+-----------------------------------
+
+This method is used to retrieve data from Redis by its key.
+
+redisClient.get(key, callback)
+
+✅ Parameters:
+================
+
+key (string) – The key you want to look up in Redis.
+
+callback (function) – A function that handles the response from Redis. This function has two arguments:
+
+error – If something goes wrong (e.g., Redis is down), this will have the error object.
+
+result – This is the value stored in Redis under the given key (as a string).
+
+🔁 Your Code:
+==============
+
+redisClient.get('photos', async (error, photos) => {
+This tries to get the value stored in Redis under the key "photos".
+
+If Redis has that key (i.e., a "cache hit"), it will return the value in photos.
+
+If not (i.e., a "cache miss"), then your app fetches data from an external API and stores it in Redis.
+
+🔄 Flow Explained (Simple Analogy 🎯)
+=======================================
+
+Imagine Redis as a super-fast memory-based key-value notebook.
+
+1. First, we ask Redis:
+
+“Hey, do you already have something written under the label photos?”
+
+2. Redis checks:
+
+If it does (cache hit): It gives us that data (photos) and we skip the slow API request.
+
+If it doesn’t (cache miss): Then:
+
+We call the external API using Axios.
+
+We get the data.
+
+We write it in Redis using SETEX so it's available next time.
+
+🔥 Inside the Callback:
+---------------------------
+
+if (error) console.log(`An error occurred: ${error}`);
+
+if (photos != null) {
+    console.log("cache hit");
+    return res.json(JSON.parse(photos));
+} else {
+    console.log("cache miss");
+
+    const { data } = await axios.get(
+        "https://jsonplaceholder.typicode.com/photos",
+        {
+            params: { albumId }
+        }
+    );
+
+    redisClient.SETEX("photos", DEFAULT_EXPIRATION, JSON.stringify(data));
+    
+    res.status(200).json(data);
+}
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Summary for other methods for redis usage in node js applications
+
+🧠 1. Basic Key-Value Operations
+----------------------------------
+
+| Redis Command | Node.js Method (`v3`)                | Node.js Method (`v4+`)                | Description                                           |
+| ------------- | ------------------------------------ | ------------------------------------- | ----------------------------------------------------- |
+| `SET`         | `redisClient.set(key, value)`        | `await client.set(key, value)`        | Set a key with value                                  |
+| `GET`         | `redisClient.get(key, cb)`           | `await client.get(key)`               | Get value of a key                                    |
+| `DEL`         | `redisClient.del(key)`               | `await client.del(key)`               | Delete a key                                          |
+| `EXISTS`      | `redisClient.exists(key)`            | `await client.exists(key)`            | Check if key exists (returns 1 or 0)                  |
+| `EXPIRE`      | `redisClient.expire(key, seconds)`   | `await client.expire(key, seconds)`   | Set time-to-live (TTL)                                |
+| `TTL`         | `redisClient.ttl(key)`               | `await client.ttl(key)`               | Get TTL for a key                                     |
+| `SETEX`       | `redisClient.setex(key, ttl, value)` | `await client.setEx(key, ttl, value)` | Set value with expiration (shortcut for SET + EXPIRE) |
+
+
+🔁 2. Counter Operations
+--------------------------
+
+| Redis Command | Node.js Method                                                         | Description                   |
+| ------------- | ---------------------------------------------------------------------- | ----------------------------- |
+| `INCR`        | `redisClient.incr(key)` / `await client.incr(key)`                     | Increments integer value by 1 |
+| `DECR`        | `redisClient.decr(key)` / `await client.decr(key)`                     | Decrements integer value by 1 |
+| `INCRBY`      | `redisClient.incrby(key, amount)` / `await client.incrBy(key, amount)` | Increment by specific number  |
+| `DECRBY`      | `redisClient.decrby(key, amount)` / `await client.decrBy(key, amount)` | Decrement by specific number  |
+
+
+🧺 3. List Operations (like an array)
+---------------------------------------
+
+| Redis Command | Node.js Method                         | Description                           |
+| ------------- | -------------------------------------- | ------------------------------------- |
+| `LPUSH`       | `redisClient.lpush(key, value)`        | Push value to the beginning of a list |
+| `RPUSH`       | `redisClient.rpush(key, value)`        | Push value to the end of a list       |
+| `LPOP`        | `redisClient.lpop(key)`                | Pop value from the start              |
+| `RPOP`        | `redisClient.rpop(key)`                | Pop value from the end                |
+| `LRANGE`      | `redisClient.lrange(key, start, stop)` | Get elements from list (like slice)   |
+| `LLEN`        | `redisClient.llen(key)`                | Get length of the list                |
+
+🧾 4. Set Operations (like unique collections)
+------------------------------------------------
+
+| Redis Command | Node.js Method                      | Description                  |
+| ------------- | ----------------------------------- | ---------------------------- |
+| `SADD`        | `redisClient.sadd(key, value)`      | Add value to set             |
+| `SREM`        | `redisClient.srem(key, value)`      | Remove value from set        |
+| `SMEMBERS`    | `redisClient.smembers(key)`         | Get all members of a set     |
+| `SISMEMBER`   | `redisClient.sismember(key, value)` | Check if value is in the set |
+
+
+🔐 5. Hash Operations (like JSON objects / dictionaries)
+----------------------------------------------------------
+
+| Redis Command | Node.js Method                            | Description               |
+| ------------- | ----------------------------------------- | ------------------------- |
+| `HSET`        | `redisClient.hset(key, field, value)`     | Set field in a hash       |
+| `HGET`        | `redisClient.hget(key, field)`            | Get specific field        |
+| `HGETALL`     | `redisClient.hgetall(key)`                | Get entire hash as object |
+| `HDEL`        | `redisClient.hdel(key, field)`            | Delete field from hash    |
+| `HEXISTS`     | `redisClient.hexists(key, field)`         | Check if field exists     |
+| `HINCRBY`     | `redisClient.hincrby(key, field, number)` | Increment hash field      |
+
+
+🕒 6. Expiration & Persistence
+-------------------------------
+
+| Redis Command | Node.js Method                     | Description                           |
+| ------------- | ---------------------------------- | ------------------------------------- |
+| `EXPIRE`      | `redisClient.expire(key, seconds)` | Set TTL                               |
+| `TTL`         | `redisClient.ttl(key)`             | Time left before expiration           |
+| `PERSIST`     | `redisClient.persist(key)`         | Remove TTL (make key permanent again) |
+
+
+🧹 7. Utility
+----------------
+
+| Redis Command | Node.js Method              | Description                            |
+| ------------- | --------------------------- | -------------------------------------- |
+| `FLUSHALL`    | `redisClient.flushall()`    | Delete all keys in Redis (be careful!) |
+| `KEYS`        | `redisClient.keys(pattern)` | Get all keys that match pattern        |
+| `TYPE`        | `redisClient.type(key)`     | Get the type of data stored at key     |
+

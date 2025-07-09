@@ -1,0 +1,60 @@
+✅ How to use Redis Lists
+---------------------------
+
+🟢 1. LPUSH = Add to the start (left) of the list
+-----------------------------------------------------
+LPUSH fruits "apple"
+LPUSH fruits "banana"
+LPUSH fruits "orange"
+
+Now the list fruits looks like:
+
+["orange", "banana", "apple"]
+
+LPUSH = Left Push
+
+🔵 2. RPUSH = Add to the end (right) of the list
+------------------------------------------------------
+RPUSH fruits "grape"
+
+Now the list becomes:
+
+["orange", "banana", "apple", "grape"]
+
+
+👀 3. LRANGE = View items in the list
+----------------------------------------
+LRANGE fruits 0 -1
+
+Shows all items in the list
+
+0 = start index
+
+-1 = end index (means "to the last item")
+
+Example output:
+
+1) "orange"
+2) "banana"
+3) "apple"
+4) "grape"
+
+
+❌ 4. LPOP / RPOP = Remove from start or end
+-----------------------------------------------
+
+LPOP fruits  # removes "orange"
+RPOP fruits  # removes "grape"
+
+Now list is:
+
+["banana", "apple"]
+
+
+🧠 When to use Redis Lists?
+------------------------------
+Message queues (first-in, first-out)
+
+Logs (new entries at the top)
+
+Tasks (to-do lists)

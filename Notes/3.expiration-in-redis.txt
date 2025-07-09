@@ -1,0 +1,68 @@
+🕒 What is expiration in Redis?
+---------------------------------
+
+Expiration means:
+"Store this data, but automatically delete it after some time."
+
+Just like setting an expiry date on food — after that time, it’s gone.
+
+🧪 Example:
+--------------
+
+SET session_token "abc123" EX 60
+
+This saves "abc123" under the key "session_token".
+
+The EX 60 part means: "expire after 60 seconds."
+
+After 60 seconds, Redis will automatically delete it.
+
+
+📦 Syntax Summary
+--------------------
+
+✅ EX = set time in seconds
+
+SET mykey "hello" EX 10  # Expires in 10 seconds
+
+✅ PX = set time in milliseconds
+
+SET mykey "hello" PX 5000  # Expires in 5000 milliseconds (5 sec)
+
+❓ How to check how much time is left?
+---------------------------------------
+
+Use TTL command (Time To Live):
+
+TTL mykey
+
+Returns:
+
+Time left in seconds
+
+-1 if key exists but has no expiry
+
+-2 if key is already deleted
+
+🧹 Why use expirations?
+-------------------------
+
+Login sessions (auto logout after 1 hour)
+
+Verification codes (like OTP, valid for 2 minutes)
+
+Cache (store data temporarily to avoid recomputing)
+
+✅ Set expiry separately (optional)
+-----------------------------------
+
+You can also do it like this:
+
+SET mykey "hi"
+EXPIRE mykey 30
+
+This sets mykey to expire in 30 seconds after it's created.
+
+
+
+

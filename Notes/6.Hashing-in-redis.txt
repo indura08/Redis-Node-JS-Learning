@@ -1,0 +1,108 @@
+🧩 What is a Redis Hash?
+--------------------------
+
+A Hash in Redis is like a small object or dictionary — it stores data in a key:value format inside another key.
+
+It's like this:
+
+"user:1" = {
+  "name": "Indura",
+  "age": "25",
+  "city": "Colombo"
+}
+
+
+So instead of one value, a hash holds many fields and values.
+
+🔧 Why use hashes?
+--------------------
+
+You want to store structured data, like a user, product, or post.
+
+Each "record" can have multiple fields.
+
+✅ Basic Hash Commands
+---------------------------
+
+1. HSET = Set a field in a hash
+
+HSET user:1 name "Indura"
+HSET user:1 age "25"
+HSET user:1 city "Colombo"
+
+Now user:1 looks like:
+
+{
+  "name": "Indura",
+  "age": "25",
+  "city": "Colombo"
+}
+
+
+2. HGET = Get one field
+
+HGET user:1 name
+
+Output:
+
+"Indura"
+
+
+3. HGETALL = Get all fields and values
+
+HGETALL user:1
+
+1) "name"
+2) "Indura"
+3) "age"
+4) "25"
+5) "city"
+6) "Colombo"
+
+
+. HDEL = Delete a field
+
+HDEL user:1 city
+Now city is gone.
+
+5. HEXISTS = Check if a field exists
+
+HEXISTS user:1 age
+
+Returns:
+
+1 if the field exists
+
+0 if it doesn't
+
+6. HSETNX = Set a field only if it doesn’t exist
+
+HSETNX user:1 name "SomeoneElse"
+It won’t overwrite "Indura" because name already exists.
+
+7. HINCRBY = Increase a numeric field
+
+HSET user:1 score 10
+HINCRBY user:1 score 5
+
+Now score is 15.
+
+
+🧠 When to use Redis Hashes?
+To store structured data:
+
+Users
+
+Products
+
+Profiles
+
+Instead of making lots of separate keys like:
+
+user:1:name
+user:1:age
+user:1:city
+
+Use one hash: user:1
+
+

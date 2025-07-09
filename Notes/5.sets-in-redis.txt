@@ -1,0 +1,103 @@
+🧺 What is a Redis Set?
+---------------------------
+
+A Set is like a basket of unique items.
+You can add, remove, and check items — but no duplicates allowed.
+
+Think of it like:
+
+{"apple", "banana", "orange"}
+
+Even if you try to add "apple" again, it won’t be added twice.
+
+
+✅ Basic Set Commands
+-----------------------
+
+1. SADD = Add to a set
+
+SADD fruits "apple"
+SADD fruits "banana"
+SADD fruits "orange"
+
+Now fruits contains:
+
+{"apple", "banana", "orange"}
+
+If you do:
+
+SADD fruits "apple"
+
+Redis ignores it (because "apple" is already there).
+
+2. SMEMBERS = Show all items in the set
+
+SMEMBERS fruits
+
+1) "apple"
+2) "banana"
+3) "orange"
+
+
+Output:
+
+Sets have no order — items come in random order.
+
+3. SISMEMBER = Check if an item is in the set
+
+SISMEMBER fruits "banana"
+
+Returns:
+
+1 if it’s there
+
+0 if not
+
+4. SREM = Remove an item from the set
+
+SREM fruits "orange"
+
+Now the set becomes:
+
+{"apple", "banana"}
+
+
+
+5. SCARD = Count how many items are in the set
+
+SCARD fruits
+
+Returns:
+
+2
+
+
+🔁 Set Operations (Optional, for when you're ready)
+------------------------------------------------------
+
+Sets in Redis can also do math-like operations like:
+
+SINTER = Get common items from two sets
+
+SUNION = Get all unique items from both sets
+
+SDIFF = Get items in one set but not in another
+
+Example:
+
+SADD set1 "apple" "banana" "grape"
+SADD set2 "banana" "grape" "melon"
+
+SINTER set1 set2
+
+# returns: "banana", "grape"
+
+🧠 When to use Redis Sets?
+
+When you need unique values
+
+Checking membership quickly
+
+Tag systems (e.g. users with a "premium" tag)
+
+Online user tracking (who’s currently online)

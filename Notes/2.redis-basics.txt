@@ -1,0 +1,84 @@
+🧠 The Basics — Redis is like a dictionary
+---------------------------------------------
+
+You store and get data using simple commands.
+
+❗ Redis stores data as:
+
+Keys and Values
+
+Think of it like:
+
+"username" => "Indura"
+"score"    => 100
+
+🛠️ Redis Commands (Beginner-Level)
+-------------------------------------
+
+✅ 1. SET a value
+
+SET name "Indura"
+This saves "Indura" under the key "name".
+
+✅ 2. GET a value
+
+GET name
+
+This will return:
+
+"Indura"
+
+
+✅ 3. INCR and DECR
+
+Increase or decrease a number.
+
+SET score 10
+INCR score      # becomes 11
+DECR score      # becomes 10 again
+
+✅ 4. DEL (delete)
+
+DEL name
+Deletes the key "name".
+
+✅ 5. EXISTS
+
+Check if a key exists:
+
+EXISTS name
+
+Returns:
+
+1 if it exists
+
+0 if it doesn’t
+
+🤖 How to try this?
+--------------------
+
+1. Open your terminal.
+
+2. Run the Redis CLI:
+
+	redis-cli
+
+3. Now try commands:
+
+SET name "Indura"
+GET name
+
+🔁 Quick Summary
+-----------------
+
+| Command  | What it does        |
+| -------- | ------------------- |
+| `SET`    | Save a value        |
+| `GET`    | Get a value         |
+| `DEL`    | Delete a key        |
+| `EXISTS` | Check if key exists |
+| `INCR`   | Increase number     |
+| `DECR`   | Decrease number     |
+
+
+
