@@ -1,5 +1,5 @@
 {
-  "name": "project",
+  "name": "bull-queue-learning-project",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {

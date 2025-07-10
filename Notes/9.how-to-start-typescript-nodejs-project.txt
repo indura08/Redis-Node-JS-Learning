@@ -1,0 +1,72 @@
+Step 1: Setup a new Node.js + Express + TypeScript project
+-----------------------------------------------------------
+
+1. Create a new project folder and open terminal there
+
+mkdir my-express-ts-api
+cd my-express-ts-api
+
+2. Initialize npm project
+
+npm init -y
+This creates package.json with default values.
+
+
+3. Install required dependencies
+
+You need:
+
+express (the web framework)
+
+typescript (TypeScript compiler)
+
+Types for Node and Express (@types/node, @types/express)
+
+ts-node (to run TS files directly)
+
+nodemon (to auto restart on file changes, optional but helpful)
+
+@types/cors if you use cors
+
+
+Run:
+
+npm install express cors
+npm install -D typescript ts-node nodemon @types/node @types/express @types/cors
+
+
+4. Setup tsconfig.json
+
+This file tells TypeScript how to compile your project.
+
+Generate a default config:
+
+npx tsc --init
+
+Open tsconfig.json and make sure you have these settings (you can adjust as needed):
+
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true
+  }
+}
+
+
+Step 2: Create your project structure
+
+my-express-ts-api/
+├── src/
+│   ├── index.ts
+│   └── routes/
+│       └── userRoutes.ts
+├── package.json
+├── tsconfig.json
+
+

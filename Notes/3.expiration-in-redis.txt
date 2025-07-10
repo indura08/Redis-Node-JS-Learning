@@ -54,7 +54,7 @@ Verification codes (like OTP, valid for 2 minutes)
 Cache (store data temporarily to avoid recomputing)
 
 ✅ Set expiry separately (optional)
------------------------------------
+-------------------------------------
 
 You can also do it like this:
 
