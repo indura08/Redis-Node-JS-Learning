@@ -1,0 +1,116 @@
+Look this example:
+
+orderQueue.on('failed', async (job, err) => {
+  if (job.attemptsMade >= 3) {
+    await redis.set(`order-status:${job.id}`, 'failed', 'EX', 3600);
+    console.error(`Order ${job.id} failed after 3 attempts`);
+  }
+});
+
+what exactly meant by this .on method in bull queue:
+
+This is Bull's event listener method.
+
+It lets you react to events that happen inside the queue system.
+
+Think of it like:
+
+“Hey queue, when something happens, call this function
+
+🔹 Syntax
+
+queue.on('event-name', (job, error) => {
+  // Do something when this event happens
+});
+
+
+The 'failed' event is triggered when a job fails.
+
+🔹 So what does 'failed' mean?
+---------------------------------
+
+It means that a job has failed during processing (threw an error or was rejected).
+
+This could be:
+
+throw new Error("Simulated failure");
+
+🔹 What do the parameters mean?
+
+(job, err) => { ... }
+
+job: This is the job that failed.
+
+err: This is the error that was thrown or caused the failure.
+
+
+🔹 What's inside the function?
+
+if (job.attemptsMade >= 3) {
+  // The job failed 3 times
+  await redis.set(`order-status:${job.id}`, 'failed', 'EX', 3600);
+  console.error(`Order ${job.id} failed after 3 attempts`);
+}
+
+
+This checks:
+-------------
+
+Did this job already retry 3 times (and still failed)?
+
+If yes, update Redis status to 'failed'
+
+Also log a message to the console
+
+🔁 Why does this matter?
+--------------------------
+
+You want to retry failed jobs, but if it keeps failing even after 3 attempts, you treat it as permanently failed.
+
+This part helps you:
+
+Know which jobs completely failed
+
+Handle them (maybe alert someone or log the failure)
+
+Update Redis so the status can be shown to the user
+
+🧠 What other events can Bull listen to?
+------------------------------------------
+
+You can also use:
+
+| Event Name    | What it means                     |
+| ------------- | --------------------------------- |
+| `'completed'` | Job completed successfully        |
+| `'failed'`    | Job failed                        |
+| `'stalled'`   | Job got stuck                     |
+| `'active'`    | Job is being processed            |
+| `'waiting'`   | Job is added and waiting in queue |
+
+more detailed table of bull events:
+
+| Event name    | Description                                   |
+| ------------- | --------------------------------------------- |
+| `'completed'` | Fired when a job is completed                 |
+| `'failed'`    | Fired when a job fails                        |
+| `'stalled'`   | Fired when a job stalls (e.g. worker crashed) |
+| `'progress'`  | Fired when a job reports progress             |
+| `'error'`     | Fired on unexpected errors                    |
+| `'waiting'`   | Fired when a job enters the waiting list      |
+| `'active'`    | Fired when a job starts being processed       |
+| `'removed'`   | Fired when a job is manually removed          |
+| `'paused'`    | Fired when the queue is paused                |
+| `'resumed'`   | Fired when the queue is resumed               |
+| `'cleaned'`   | Fired when old jobs are cleaned up            |
+| `'drained'`   | Fired when all jobs have been processed       |
+| `'removed'`   | Fired when a job is removed                   |
+
+
+Example:
+
+orderQueue.on('completed', (job, result) => {
+  console.log(`Job ${job.id} completed`);
+});
+
+
